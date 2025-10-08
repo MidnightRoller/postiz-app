@@ -31,7 +31,6 @@ export class AuthService {
     const iv = crypto.randomBytes(16);
     
     // Create cipher with key and IV
-    // FIX: Removed the redundant Buffer.from() wrappers around key and iv
     const cipher = crypto.createCipheriv(algorithm, key, iv);
     
     // Encrypt the plain text
