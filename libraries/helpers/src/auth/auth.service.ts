@@ -1,6 +1,5 @@
 import { sign, verify } from 'jsonwebtoken';
 import { hashSync, compareSync } from 'bcrypt';
-import bcrypt from 'bcrypt';
 import crypto from 'crypto';
 
 export class AuthService {
@@ -24,13 +23,16 @@ export class AuthService {
     const algorithm = 'aes-256-cbc';
     
     // Create a key from JWT_SECRET (32 bytes for aes-256)
+    // scryptSync already returns a Buffer
     const key = crypto.scryptSync(process.env.JWT_SECRET!, 'salt', 32);
     
     // Generate a random initialization vector (16 bytes for AES)
+    // randomBytes already returns a Buffer
     const iv = crypto.randomBytes(16);
     
     // Create cipher with key and IV
-    const cipher = crypto.createCipheriv(algorithm, Buffer.from(key), Buffer.from(iv));
+    // FIX: Removed the redundant Buffer.from() wrappers around key and iv
+    const cipher = crypto.createCipheriv(algorithm, key, iv);
     
     // Encrypt the plain text
     let encrypted = cipher.update(value, 'utf8', 'hex');
@@ -44,15 +46,19 @@ export class AuthService {
     const algorithm = 'aes-256-cbc';
     
     // Create the same key from JWT_SECRET
+    // scryptSync already returns a Buffer
     const key = crypto.scryptSync(process.env.JWT_SECRET!, 'salt', 32);
     
     // Split the IV and encrypted data
     const parts = hash.split(':');
+    if (parts.length !== 2) {
+      throw new Error('Invalid hash format');
+    }
     const iv = Buffer.from(parts[0], 'hex');
     const encryptedText = parts[1];
     
     // Create decipher with key and IV
-    const decipher = crypto.createDecipheriv(algorithm, Buffer.from(key), iv);
+    const decipher = crypto.createDecipheriv(algorithm, key, iv);
     
     // Decrypt the encrypted text
     let decrypted = decipher.update(encryptedText, 'hex', 'utf8');
