@@ -226,7 +226,10 @@ export function RegisterAfter({
               className="flex-1 rounded-[4px]"
               loading={loading}
             >
-              {t('create_account', 'Create Account')}
+              <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-lg" />
+              <div className="px-8 py-2  rounded-[6px] relative group transition duration-200 text-white hover:border-white">
+                {t('create_account', 'Create Account')}
+              </div>
             </Button>
           </div>
           <p className="mt-4 text-sm">

@@ -54,7 +54,7 @@ jobs:
             -t ghcr.io/gitroomhq/postiz-app:${{ env.CONTAINERVER }}-${{ matrix.arch }} \
             --build-arg NEXT_PUBLIC_VERSION=${{ env.NEXT_PUBLIC_VERSION }} \
             --provenance=false --sbom=false \
-            --output "type=registry,name=ghcr.io/gitroomhq/postiz-app:${{ env.CONTAINERVER }}-${{ matrix.arch }}" .
+            --output "type=registry,name=ghcr.io/gitroomhq/-app:${{ env.CONTAINERVER }}-${{ matrix.arch }}" .
 
   build-container-manifest:
     needs: [build-containers, build-containers-common]

@@ -7,7 +7,7 @@ const Comp: FC<{ removeModal: () => void; platform: string; style: string }> = (
 ) => {
   const load = async () => {
     const cookie = await fetchCookie(`auth`);
-    if (document.querySelector('iframe#modal-postiz')) {
+    if (document.querySelector('iframe#modal-')) {
       return;
     }
 
